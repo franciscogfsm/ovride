@@ -72,6 +72,7 @@ export function useRun() {
   const [genBusy, setGenBusy] = useState(false);
 
   const ac = useRef<AbortController | null>(null);
+  const attackRef = useRef<Attack | null>(null);
   const playingRef = useRef(false);
   playingRef.current = playing;
   const eventsRef = useRef<TraceEvent[]>([]);
@@ -90,6 +91,7 @@ export function useRun() {
   /** Open an attack (from the library or a saved one) ready to run. */
   const open = useCallback((a: Attack) => {
     ac.current?.abort();
+    attackRef.current = a;
     setAttack(a);
     setNote(null);
     setEvents([]);
@@ -102,6 +104,7 @@ export function useRun() {
   /** Load a saved run for forensic replay. */
   const load = useCallback((run: SavedRun) => {
     ac.current?.abort();
+    attackRef.current = run.attack;
     setAttack(run.attack);
     setNote(null);
     setEvents(run.events);
@@ -111,7 +114,7 @@ export function useRun() {
     setPhase("done");
   }, []);
 
-  const generate = useCallback(async () => {
+  const generate = useCallback(async (genModel?: string): Promise<Attack | null> => {
     ac.current?.abort();
     const g = new AbortController();
     ac.current = g;
@@ -122,23 +125,27 @@ export function useRun() {
       const res = await fetch("/api/attack", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ previous: techniques, model: model || undefined }),
+        body: JSON.stringify({ previous: techniques, model: genModel || model || undefined }),
         signal: g.signal,
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json?.error ?? `status ${res.status}`);
-      setAttack(json.attack as Attack);
+      const attack = json.attack as Attack;
+      attackRef.current = attack;
+      setAttack(attack);
       setNote(json.note ?? null);
-      setTechniques((t) => [...new Set([...t, json.attack.technique])].slice(-20));
+      setTechniques((t) => [...new Set([...t, attack.technique])].slice(-20));
       setEvents([]);
       setCursor(0);
       setSelected(null);
       setPlaying(false);
       setPhase("ready");
+      return attack;
     } catch (e) {
-      if (g.signal.aborted) return;
+      if (g.signal.aborted) return null;
       setNote(`Attack generation failed: ${e instanceof Error ? e.message : String(e)}`);
       setPhase((p) => (p === "generating" ? "idle" : p));
+      return null;
     } finally {
       setGenBusy(false);
     }
@@ -146,10 +153,11 @@ export function useRun() {
 
   const start = useCallback(
     async (body: string) => {
-      if (!policy || !attack || !body.trim()) return;
+      const current = attackRef.current;
+      if (!policy || !current || !body.trim()) return;
       ac.current?.abort();
       const got: TraceEvent[] = [];
-      const record = () => got.length && saveRun(toSaved({ ...attack, body }, policy, model, got));
+      const record = () => got.length && saveRun(toSaved({ ...current, body }, policy, model, got));
       const r = new AbortController();
       ac.current = r;
       setEvents([]);
@@ -185,7 +193,7 @@ export function useRun() {
         setPlaying(false);
       }
     },
-    [policy, model, attack],
+    [policy, model],
   );
 
   // Replay loop: after the stream ends, play compresses wall-clock time into at most MAX_REPLAY_MS.

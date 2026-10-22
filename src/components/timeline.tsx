@@ -24,6 +24,7 @@ export function Timeline(props: {
   onRewind: () => void;
   onScrub: (t: number) => void;
   onSelect: (step: Step) => void;
+  inline?: boolean;
 }) {
   const { events, cursor, duration, playing, divergence: div, onTogglePlay, onRewind, onScrub, onSelect } = props;
   const track = useRef<HTMLDivElement>(null);
@@ -39,8 +40,8 @@ export function Timeline(props: {
   };
 
   return (
-    <div className="fixed bottom-3 left-0 right-0 lg:left-[var(--side)] z-40 flex justify-center px-3 sm:px-4 pointer-events-none">
-      <Glass radius={26} bezel={16} tone="smoke" className="pointer-events-auto w-full max-w-[1180px] px-3 py-2.5 sm:px-4">
+    <div className={props.inline ? "w-full" : "fixed bottom-3 left-0 right-0 lg:left-[var(--side)] z-40 flex justify-center px-3 sm:px-4 pointer-events-none"}>
+      <Glass radius={26} bezel={16} tone="smoke" className={props.inline ? "w-full px-3 py-2.5 sm:px-4" : "pointer-events-auto w-full max-w-[1180px] px-3 py-2.5 sm:px-4"}>
         <div className="relative z-[2] flex items-center gap-3">
           <div className="flex items-center gap-1.5 shrink-0">
             <GlassButton size="sm" aria-label="Rewind to the start" onClick={onRewind} className="!size-8 !px-0">
