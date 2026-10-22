@@ -15,7 +15,7 @@ type Base = { branch: Branch; seq: number; t: number };
 export type TraceEvent = Base &
   (
     | { kind: "run_start"; mode: "live" | "scripted"; model: string; enforce: boolean }
-    | { kind: "model"; text: string; stopReason: string; step: number }
+    | { kind: "model"; text: string; stopReason: string; step: number; usage?: { input: number; output: number; cost: number | null } }
     | { kind: "tool_call"; callId: string; tool: string; args: Record<string, string>; decision: Decision | null; error?: string }
     | { kind: "tool_result"; callId: string; tool: string; status: "executed" | "blocked" | "invalid"; result: unknown; flags: string[] }
     | { kind: "run_end"; outcome: Outcome }

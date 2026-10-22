@@ -2,18 +2,19 @@ import { z } from "zod";
 import { runBranch, type Emit } from "@/lib/agent";
 import { PolicySchema } from "@/lib/policy";
 import type { Branch } from "@/lib/events";
+import { DEFAULT_MODEL, ModelId, hasKey } from "@/lib/openrouter";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const Body = z.object({ attack: z.string().min(1).max(4000), policy: PolicySchema });
+const Body = z.object({ attack: z.string().min(1).max(4000), policy: PolicySchema, model: ModelId.optional() });
 
 // Runs both realities concurrently, each with its own fresh world, and streams every event as SSE.
 export async function POST(req: Request) {
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return Response.json({ error: "Invalid request" }, { status: 400 });
-  const { attack, policy } = parsed.data;
-  const live = Boolean(process.env.ANTHROPIC_API_KEY);
+  const { attack, policy, model = DEFAULT_MODEL } = parsed.data;
+  const live = hasKey();
   const ac = new AbortController();
   req.signal.addEventListener("abort", () => ac.abort());
 
@@ -28,8 +29,8 @@ export async function POST(req: Request) {
         controller.enqueue(enc.encode(`data: ${JSON.stringify(ev)}\n\n`));
       };
       await Promise.all([
-        runBranch({ enforce: false, attack, policy, live, emit: send("A"), signal: ac.signal }),
-        runBranch({ enforce: true, attack, policy, live, emit: send("B"), signal: ac.signal }),
+        runBranch({ enforce: false, attack, policy, live, model, emit: send("A"), signal: ac.signal }),
+        runBranch({ enforce: true, attack, policy, live, model, emit: send("B"), signal: ac.signal }),
       ]);
       if (!ac.signal.aborted) controller.enqueue(enc.encode(`data: {"kind":"done"}\n\n`));
       controller.close();

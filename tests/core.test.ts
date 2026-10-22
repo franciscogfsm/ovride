@@ -59,8 +59,8 @@ async function both(attack: string) {
   const mk = (branch: "A" | "B"): Emit => (e) => events.push({ ...e, branch, seq: 0, t: 0 } as TraceEvent);
   const signal = new AbortController().signal;
   await Promise.all([
-    runBranch({ enforce: false, attack, policy: DEFAULT_POLICY, live: false, emit: mk("A"), signal }),
-    runBranch({ enforce: true, attack, policy: DEFAULT_POLICY, live: false, emit: mk("B"), signal }),
+    runBranch({ enforce: false, attack, policy: DEFAULT_POLICY, live: false, model: "scripted", emit: mk("A"), signal }),
+    runBranch({ enforce: true, attack, policy: DEFAULT_POLICY, live: false, model: "scripted", emit: mk("B"), signal }),
   ]);
   const end = (b: string) => events.find((e) => e.branch === b && e.kind === "run_end") as Extract<TraceEvent, { kind: "run_end" }>;
   return { events, A: end("A").outcome, B: end("B").outcome };
