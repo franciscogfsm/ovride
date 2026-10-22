@@ -1,17 +1,12 @@
 "use client";
 import Link from "next/link";
-import { Cpu, Loader, ShieldCheck, Sparkles } from "lucide-react";
-import { Glass, GlassButton } from "./glass";
+import { Cpu, FlaskConical, ShieldCheck } from "lucide-react";
+import { Glass } from "./glass";
 
-export function Nav(props: {
-  live: boolean;
-  onFind: () => void;
-  busy: boolean;
-  busyLabel?: string;
-}) {
+export function Nav(props: { live: boolean }) {
   return (
-    <div className="fixed top-3 inset-x-0 z-40 flex justify-center px-3 sm:px-4">
-      <Glass radius={999} bezel={14} className="h-[54px] w-full max-w-[1440px] px-2.5 flex items-center gap-2">
+    <div className="fixed top-2.5 inset-x-0 z-40 flex justify-center px-3">
+      <Glass radius={999} bezel={14} className="h-[54px] w-full px-2.5 flex items-center gap-2">
         <Link href="/" className="flex items-center gap-2.5 pl-1.5">
           <span className="grid size-[26px] place-items-center rounded-lg bg-white/[0.07] shadow-[inset_0_0_0_1px_rgba(255,255,255,.09)]">
             <ShieldCheck size={14} strokeWidth={2.2} className="text-[color:var(--ice)]" />
@@ -28,10 +23,10 @@ export function Nav(props: {
           {props.live ? "Live LLM" : "Sample Replay"}
         </span>
         <div className="flex-1" />
-        <GlassButton variant="primary" onClick={props.onFind} disabled={props.busy}>
-          {props.busy ? <Loader size={14} className="animate-spin" /> : <Sparkles size={14} />}
-          {props.busy ? props.busyLabel ?? "Working…" : "Find Vulnerabilities"}
-        </GlassButton>
+        <span className="hidden sm:inline-flex items-center gap-1.5 pr-3 text-[11.5px] text-fg-3">
+          <FlaskConical size={13} />
+          Attack Lab · fictional sandbox
+        </span>
       </Glass>
     </div>
   );

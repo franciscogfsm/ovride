@@ -1,0 +1,215 @@
+OVRIDE — 5-MINUTE PITCH SCRIPT
+Hack your AI before someone else does.
+
+Deck: ovride-deck-v2 (arrow keys / space to advance, F for full screen)
+Speaking pace: about 140 words per minute. Total spoken text is roughly 650 words.
+Lines in [brackets] are stage cues, not words to say.
+Lines marked [PAUSE] are deliberate: let the animation finish before talking.
+
+The organizers asked for something surprising, relevant and useful. The
+structure follows that: surprise first (the opening), relevance (the
+problem), usefulness (what it does, then the live demo).
+
+==========================================================
+SLIDE 1 — INTRO                                   0:00 - 0:35
+==========================================================
+[Start on the first slide. Say nothing while the terminal types.
+ The system rule appears, then an injected line strikes it out.]
+
+[PAUSE until the rule is crossed out and the beam sweeps.]
+
+"This is an AI agent. Its rule is simple: never send customer data
+outside the company.
+
+Then it reads an email. And one line inside that email says: ignore
+your instructions.
+
+Most agents obey. That is the problem we built OVRIDE to solve."
+
+[OVRIDE appears.]
+
+"OVRIDE. Hack your AI before someone else does."
+
+[Advance.]
+
+==========================================================
+SLIDE 2 — THE PROBLEM                             0:35 - 1:25
+==========================================================
+[Let the scan beam reveal the hidden line in the email.]
+
+"Here is what actually happened. An email arrives. It looks harmless:
+someone asking the agent to summarise an invoice.
+
+But hidden inside it is a second instruction, written for the AI, not
+for the human."
+
+[The line turns red; the connectors light up down to the agent.]
+
+"The agent reads the whole email as one task. It cannot tell the
+difference between its owner's instructions and a stranger's text.
+
+So it uses a real tool it was given, send_email, and customer data
+leaves the building."
+
+[send_email types out, EXECUTED appears.]
+
+"Nobody hacked a server. Nobody broke a password. The attacker just
+wrote a sentence. And today, most teams building agents have no way to
+test for this, and no way to stop it."
+
+[Advance.]
+
+==========================================================
+SLIDE 3 — WHAT OVRIDE DOES                        1:25 - 2:10
+==========================================================
+[Stages light up one by one while the log fills.]
+
+"OVRIDE turns that into a one-click test.
+
+You create an agent in OVRIDE, or connect one, and you press Find
+Vulnerabilities. Then five things happen.
+
+One: we inspect the agent, its tools and its permissions.
+Two: an attacker model writes injections aimed at that specific agent.
+Three: the real agent runs them, inside an isolated sandbox with
+fictional data.
+Four: we verify the result.
+And five: you get a report with evidence and a fix."
+
+[Point at the bottom line of the slide.]
+
+"One thing matters a lot to us: a vulnerability is only confirmed by
+what the agent actually did, a real tool call we measured. Never
+because another AI said so."
+
+[Advance.]
+
+==========================================================
+SLIDE 4 — SPLIT REALITY                           2:10 - 3:10
+==========================================================
+[Let both panes run in sync. Do not talk over the first two lines.]
+
+"This is our signature feature: Split Reality. One agent, two realities.
+
+On the left, the agent runs without protection. On the right, the same
+agent, the same attack, the same model, protected by OVRIDE.
+
+These are two real executions, not a recording. Same email, same
+starting state."
+
+[Wait for the red and mint results.]
+
+"On the left, the agent calls send_email and the data leaves.
+On the right, the same call is stopped before it ever runs.
+
+The seam in the middle is the point. You do not have to trust us, or
+trust a score. You can see, event by event, the exact moment the two
+paths diverge."
+
+"And if an attack fails on both sides, we show that honestly too. We
+never fake a difference."
+
+[Say: "The traces on this slide are illustrative. You will see the real
+ ones in the demo." Then advance.]
+
+==========================================================
+SLIDE 5 — THE GATEWAY                             3:10 - 4:00
+==========================================================
+[Checks tick on the left while the ring segments light up.]
+
+"How does the protection work? OVRIDE sits between the agent and its
+tools. Every tool call passes through a gateway.
+
+It checks five things: who is calling, whether they have permission,
+how sensitive the data is, whether the destination is approved, and
+whether a human needs to confirm."
+
+[A white packet passes through to write_reply.]
+
+"A legitimate request goes straight through. Nothing slows the agent
+down."
+
+[A red packet stops at the ring and bursts.]
+
+"A request to send customer data to an unapproved address is stopped at
+the ring, with the exact reason.
+
+The key point: these are deterministic rules, not another AI guessing.
+AI helps us explain and detect. It never has the final word on a hard
+boundary.
+
+And to be precise: OVRIDE enforces where it controls or intercepts the
+tool execution. We do not claim to block things inside a black-box agent
+we cannot see."
+
+[Advance.]
+
+==========================================================
+SLIDE 6 — FORENSIC REPLAY                         4:00 - 4:30
+==========================================================
+[The playhead plays by itself. Then drag it by hand while talking.]
+
+"Every run is recorded, so every incident can be replayed.
+
+You can scrub the timeline like a video: the model request, the tool
+call, the policy decision, the block. Click any moment and see exactly
+what the agent tried, and which rule stopped it.
+
+This is how a security engineer investigates. And it is also how a
+non-technical person finally understands what their agent did."
+
+[Advance.]
+
+==========================================================
+SLIDE 7 — LIVE DEMO                               4:30 - 5:00
+==========================================================
+[The steps light up in order.]
+
+"So let's stop talking and show you. We will take a real agent, press
+Find Vulnerabilities, watch the attack run live, split reality, and
+rewind the incident.
+
+Everything you are about to see is a real execution. If the network
+fails, we have a replay mode, and it is clearly labelled as a replay."
+
+[Hand over to the live demo here. The last slide can wait until the
+ demo is finished.]
+
+==========================================================
+SLIDE 8 — CLOSE                    (after the demo, 15 seconds)
+==========================================================
+[Go back to the deck after the demo.]
+
+"AI agents are going to read our emails, our documents and our
+databases. The failures are invisible until it is too late.
+
+OVRIDE makes those failures visible, testable, and preventable.
+
+Hack your AI before someone else does. Thank you."
+
+[Show team names. Take questions.]
+
+==========================================================
+NOTES FOR THE SPEAKER
+==========================================================
+- Fill in on the last slide: [TEAM NAME] · [MEMBER NAMES].
+- Slides 4 and 6 show illustrative traces, and they are labelled as such.
+  Say so out loud. Do not present them as live results.
+- If you are running over time, cut slide 6 (Replay) down to two
+  sentences. Never cut Split Reality: it is the heart of the pitch.
+- Do not quote numbers about vulnerabilities found or models tested
+  unless the demo has produced them. We have none to claim yet.
+- Likely questions:
+  Q: Can it protect any agent?
+  A: It enforces policies where it controls or intercepts tool
+     execution: agents built in OVRIDE, and external agents through an
+     authenticated integration. It cannot block actions inside agents
+     it cannot intercept.
+  Q: Why not just ask an AI whether an action is safe?
+  A: Because an AI can be fooled by the same injection. Hard boundaries
+     are deterministic rules; AI only explains and helps detect.
+  Q: Is the attack data real?
+  A: No. All testing runs in isolated sandboxes with fictional data.
+  Q: Which models does it use?
+  A: Models run through OpenRouter, and the target, attacker and
+     analysis models can be chosen independently.

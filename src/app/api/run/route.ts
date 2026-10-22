@@ -7,14 +7,15 @@ import { DEFAULT_MODEL, ModelId, hasKey } from "@/lib/openrouter";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const Body = z.object({ attack: z.string().min(1).max(4000), policy: PolicySchema, model: ModelId.optional() });
+const Body = z.object({ attack: z.string().min(1).max(4000), policy: PolicySchema, model: ModelId.optional(), mode: z.enum(["demo", "live"]).optional() });
 
 // Runs both realities concurrently, each with its own fresh world, and streams every event as SSE.
 export async function POST(req: Request) {
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return Response.json({ error: "Invalid request" }, { status: 400 });
-  const { attack, policy, model = DEFAULT_MODEL } = parsed.data;
-  const live = hasKey();
+  const { attack, policy, model = DEFAULT_MODEL, mode } = parsed.data;
+  // "demo" forces the scripted agent even when a key is set; it still uses the real tools and policy.
+  const live = hasKey() && mode !== "demo";
   const ac = new AbortController();
   req.signal.addEventListener("abort", () => ac.abort());
 

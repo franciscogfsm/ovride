@@ -1,6 +1,6 @@
 "use client";
 import { AnimatePresence, motion } from "motion/react";
-import { ChevronDown, CircleCheck, Loader, Play, ShieldCheck, Sparkles, X } from "lucide-react";
+import { ChevronDown, CircleCheck, Loader, Play, ShieldCheck, Crosshair, X } from "lucide-react";
 import { useState } from "react";
 import { Glass, GlassButton } from "./glass";
 import { PolicyEditor } from "./policy-editor";
@@ -98,7 +98,7 @@ export function AttackCard(props: {
           {props.modal ? "Run again" : "Run attack"}
         </GlassButton>
         <GlassButton onClick={props.onFind} disabled={props.genBusy}>
-          {props.genBusy ? <Loader size={14} className="animate-spin" /> : <Sparkles size={14} />}
+          {props.genBusy ? <Loader size={14} className="animate-spin" /> : <Crosshair size={14} />}
           New variant
         </GlassButton>
         <div className="relative">

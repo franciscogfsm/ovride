@@ -2,7 +2,7 @@
 // The Lab's empty state: the agent under test, its execution path, and the two ways to begin.
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowRight, Bot, FileText, Library, Loader, Mail, Search, Send, Sparkles, Wrench } from "lucide-react";
+import { ArrowRight, Bot, FileText, Library, Loader, Mail, Search, Send, Crosshair, Wrench } from "lucide-react";
 import { Glass, GlassButton } from "./glass";
 import type { Status } from "@/lib/use-run";
 
@@ -66,7 +66,7 @@ export function Hero(props: { status: Status | null; onFind: () => void; genBusy
 
         <div className="mt-8 flex flex-wrap items-center gap-2">
           <GlassButton variant="primary" onClick={props.onFind} disabled={props.genBusy}>
-            {props.genBusy ? <Loader size={14} className="animate-spin" /> : <Sparkles size={14} />}
+            {props.genBusy ? <Loader size={14} className="animate-spin" /> : <Crosshair size={14} />}
             {props.genBusy ? "Generating…" : "Generate an attack"}
             <ArrowRight size={14} className="opacity-60" />
           </GlassButton>

@@ -95,6 +95,31 @@ body {
 @keyframes shimmer { to { background-position: -200% 0; } }
 .scroll-thin { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.12) transparent; }
 
+/* ---------- Lab ambience ---------- */
+/* Two realities, two colours: red bleeds from the left, mint from the right, behind the glass. */
+.aurora { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.aurora::before, .aurora::after {
+  content: ""; position: absolute; width: 60vw; height: 60vw; border-radius: 999px; filter: blur(110px); opacity: .5;
+  animation: drift 22s ease-in-out infinite alternate;
+}
+.aurora::before { left: -18vw; top: 18vh; background: radial-gradient(closest-side, rgba(239,122,104,.22), transparent); }
+.aurora::after { right: -18vw; top: 6vh; background: radial-gradient(closest-side, rgba(127,224,191,.2), transparent); animation-delay: -11s; }
+@keyframes drift { to { transform: translate3d(4vw, -6vh, 0) scale(1.12); } }
+
+.text-grad { background: linear-gradient(180deg, #fff 20%, rgba(236,238,241,.55)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* Pipeline connector: a light packet that travels along the wire while a run is live. */
+.wire { position: relative; height: 1px; background: linear-gradient(90deg, rgba(255,255,255,.18), rgba(255,255,255,.04)); overflow: visible; }
+.wire-on::after {
+  content: ""; position: absolute; top: -1px; height: 3px; width: 38%; border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--wire, var(--ice)), transparent);
+  box-shadow: 0 0 12px var(--wire, var(--ice)); animation: packet 1.6s cubic-bezier(.45,0,.2,1) infinite;
+}
+@keyframes packet { from { left: -38%; } to { left: 100%; } }
+
+.halo { position: absolute; inset: -6px; border-radius: 999px; box-shadow: 0 0 0 1px currentColor; opacity: 0; animation: halo 2.2s ease-out infinite; }
+@keyframes halo { 0% { transform: scale(.85); opacity: .55; } 100% { transform: scale(1.35); opacity: 0; } }
+
 @media (prefers-reduced-motion: reduce) {
-  .live-dot, .shimmer { animation: none; }
+  .live-dot, .shimmer, .aurora::before, .aurora::after, .wire-on::after, .halo { animation: none; }
 }

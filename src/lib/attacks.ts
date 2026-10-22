@@ -136,5 +136,7 @@ Techniques already tried this session (pick something different): ${previous.len
   const json = text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1); // tolerate code fences from models without JSON mode
   const parsed = GenSchema.safeParse(JSON.parse(json || "null"));
   if (!parsed.success) throw new Error("The model did not return a usable attack.");
+  // A refusal still comes back as valid JSON; a real attempt must name the exfiltration address.
+  if (!parsed.data.body.toLowerCase().includes(ATTACKER_ADDRESS)) throw new Error("The attacker model declined to write an attack");
   return { ...parsed.data, source: "llm" };
 }

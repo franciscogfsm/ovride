@@ -22,11 +22,11 @@ export type Status = {
 export type Phase = "idle" | "generating" | "ready" | "running" | "done";
 
 /** POSTs one run and calls onEvent for every streamed trace event until the stream ends. */
-export async function streamRun(req: { attack: string; policy: Policy; model: string }, signal: AbortSignal, onEvent: (e: TraceEvent) => void) {
+export async function streamRun(req: { attack: string; policy: Policy; model: string; mode?: "demo" | "live" }, signal: AbortSignal, onEvent: (e: TraceEvent) => void) {
   const res = await fetch("/api/run", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ attack: req.attack, policy: req.policy, model: req.model || undefined }),
+    body: JSON.stringify({ attack: req.attack, policy: req.policy, model: req.model || undefined, mode: req.mode }),
     signal,
   });
   if (!res.ok || !res.body) throw new Error(`run failed (${res.status})`);
@@ -152,7 +152,7 @@ export function useRun() {
   }, [techniques, model]);
 
   const start = useCallback(
-    async (body: string) => {
+    async (body: string, mode: "demo" | "live" = "live") => {
       const current = attackRef.current;
       if (!policy || !current || !body.trim()) return;
       ac.current?.abort();
@@ -166,7 +166,7 @@ export function useRun() {
       setPlaying(true);
       setPhase("running");
       try {
-        await streamRun({ attack: body, policy, model }, r.signal, (ev) => {
+        await streamRun({ attack: body, policy, model, mode }, r.signal, (ev) => {
           got.push(ev);
           setEvents((prev) => [...prev, ev]);
           if (playingRef.current) setCursor(ev.t);
