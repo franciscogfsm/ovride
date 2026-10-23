@@ -1,7 +1,7 @@
 OVRIDE — 5-MINUTE PITCH SCRIPT
 Hack your AI before someone else does.
 
-Deck: ovride-deck-v2 (arrow keys / space to advance, F for full screen)
+Deck: pitch/deck.html (arrow keys / space to advance, F for full screen)
 Speaking pace: about 140 words per minute. Total spoken text is roughly 650 words.
 Lines in [brackets] are stage cues, not words to say.
 Lines marked [PAUSE] are deliberate: let the animation finish before talking.
